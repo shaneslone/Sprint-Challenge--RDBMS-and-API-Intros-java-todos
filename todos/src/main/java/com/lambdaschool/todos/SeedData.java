@@ -87,15 +87,14 @@ public class SeedData implements CommandLineRunner
                            "misskitty@school.lambda");
         userService.save(u5);
 
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"), new RandomService());
-
         Faker nameFaker = new Faker(new Locale("en-Us"));
 
         for(int i = 0; i < 100; i++){
             User fakeUser = new User(nameFaker.name().username(), "password", nameFaker.internet().emailAddress());
             int randomPokemonCount = (int)((Math.random() * 3) + 1);
-            for(int j = 0; j < randomPokemonCount; j++)
-            fakeUser.getTodos().add(new Todos(fakeUser, "Catch " + nameFaker.pokemon().name()));
+            for(int j = 0; j < randomPokemonCount; j++) {
+                fakeUser.getTodos().add(new Todos(fakeUser, "Catch " + nameFaker.pokemon().name()));
+            }
             userService.save(fakeUser);
 
         }
