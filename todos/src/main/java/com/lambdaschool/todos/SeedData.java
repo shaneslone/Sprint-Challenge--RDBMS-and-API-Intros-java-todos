@@ -1,11 +1,17 @@
 package com.lambdaschool.todos;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
+import com.lambdaschool.todos.models.Todos;
 import com.lambdaschool.todos.models.User;
 import com.lambdaschool.todos.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Locale;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
@@ -80,5 +86,17 @@ public class SeedData implements CommandLineRunner
                            "password",
                            "misskitty@school.lambda");
         userService.save(u5);
+
+        Faker nameFaker = new Faker(new Locale("en-Us"));
+
+        for(int i = 0; i < 100; i++){
+            User fakeUser = new User(nameFaker.name().username(), "password", nameFaker.internet().emailAddress());
+            int randomPokemonCount = (int)((Math.random() * 3) + 1);
+            for(int j = 0; j < randomPokemonCount; j++) {
+                fakeUser.getTodos().add(new Todos(fakeUser, "Catch " + nameFaker.pokemon().name()));
+            }
+            userService.save(fakeUser);
+
+        }
     }
 }
